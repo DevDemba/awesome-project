@@ -1,10 +1,6 @@
 import React, { Component } from 'react';
-import { View, Button, Text, Dimensions, TouchableOpacity, Icon } from 'react-native';
+import { View, Button, Text, Dimensions } from 'react-native';
 import MapView, { PROVIDER_GOOGLE, Marker} from 'react-native-maps';
-
-const screenWidth = Dimensions.get('window').width;
-const screenHeight = Dimensions.get('window').height;
-
 
 
 export default class MapScreen extends Component {
@@ -19,10 +15,10 @@ export default class MapScreen extends Component {
       initialPosition: 'unknown',
       lastPosition: 'unknown',
       position: {
-        initialPositionLatitude: 0,
-        initialPositionLongitude: 0,
-        latitudeDelta: 0.00522,
-        longitudeDelta: Dimensions.get("window").width / Dimensions.get("window").height * 0.00522
+      initialPositionLatitude: 0,
+      initialPositionLongitude: 0,
+      latitudeDelta: 0.00522,
+      longitudeDelta: Dimensions.get("window").width / Dimensions.get("window").height * 0.00522
       },
       watchID: number = null
     }
@@ -48,7 +44,7 @@ export default class MapScreen extends Component {
         
         this.setState({ initialPosition, initialPositionLatitude, initialPositionLongitude });
         console.log("initial position fetch", initialPosition)
-        
+       
       },
       (error) => alert(error.message),
       { enableHighAccuracy: true, timeout: 20000, maximumAge: 1000 }
@@ -59,57 +55,20 @@ export default class MapScreen extends Component {
         console.log("last position fetch")
       });
     }
-    
+
     onRegionChange(region, lastLat, lastLong) {
       this.setState({
-        mapRegion: region,
-        lastLat: lastLat || this.state.lastLat,
-        lastLong: lastLong || this.state.lastLong
+          mapRegion: region,
+          lastLat: lastLat || this.state.lastLat,
+          lastLong: lastLong || this.state.lastLong
       });
-    }
+  }
     
-    onPressZoomIn() {
-      this.region = {
-        latitude: this.state.positionn.latitude,
-        longitude: this.state.position.longitude,
-        latitudeDelta: this.state.position.latitudeDelta * 10,
-        longitudeDelta: this.state.position.longitudeDelta * 10
-      }
-      
-      this.setState({
-        position: {
-          latitudeDelta: this.region.latitudeDelta,
-          longitudeDelta: this.region.longitudeDelta,
-          latitude: this.region.latitude,
-          longitude: this.region.longitude
-        }
-      })
-      this.map.animateToRegion(this.region, 100);
-    }
-    
-    onPressZoomOut() {
-      this.region = {
-        latitude: this.state.position.latitude,
-        longitude: this.state.position.longitude,
-        latitudeDelta: this.state.position.latitudeDelta / 10,
-        longitudeDelta: this.state.position.longitudeDelta / 10
-      }
-      this.setState({
-        position: {
-          latitudeDelta: this.region.latitudeDelta,
-          longitudeDelta: this.region.longitudeDelta,
-          latitude: this.region.latitude,
-          longitude: this.region.longitude
-        }
-      })
-      this.map.animateToRegion(this.region, 100);
-    }
-    
-    /*    componentWillUnmount = () => {
+ /*    componentWillUnmount = () => {
       navigator.geolocation.clearInterval(this.watchID);
     } */
-    
-    
+ 
+
     render() {
       
       const {navigate} = this.props.navigation;
@@ -136,8 +95,6 @@ export default class MapScreen extends Component {
         </Text>
         
         </View>
-        
-        <View>
         <MapView
         style={{flex: 0.7, height: 450, width: Dimensions.get('window').width, justifyContent: 'center' }}
         provider={PROVIDER_GOOGLE}
@@ -145,11 +102,11 @@ export default class MapScreen extends Component {
         zoomControlEnabled={true}
         showsUserLocation={true}
         followsUserLocation={true}
-        region={this.state.focusedLocation}
+        region={this.state.position}
         /*  onRegionChange={this.onRegionChange} */
         > 
         
-        {/*         {
+{/*         {
           
           this.props.dataSource.map((location, index) => {
             const {
@@ -165,39 +122,8 @@ export default class MapScreen extends Component {
               )
             })
           } */}
-          {this.props.dataSource.map((marker, index) => (
-            <MapView.Marker
-              onPress={e => console.log(e.nativeEvent)}
-              key={index}
-              coordinate={marker.coordinates}
-              title={marker.title}
-            />
-          ))}
-          
+        
           </MapView>
-          
-          <TouchableOpacity
-        /*   style={styles.zoomIn} */
-          onPress={() => { this.onPressZoomIn() }}
-          >
-          <Icon
-          name="add"
-         /*  style={styles.icon} */
-          size={20}
-          />
-          </TouchableOpacity>
-          <TouchableOpacity
-          /* style={styles.zoomOut} */
-          onPress={() => { this.onPressZoomOut() }}
-          >
-          <Icon
-          name="remove"
-         /*  style={styles.icon} */
-          size={20}
-          />
-          </TouchableOpacity>
-          
-          </View>
           
           <Button 
           title="Demba's profile"
