@@ -10,7 +10,7 @@
   "dependencies": {
     "@react-native-community/geolocation": "^2.0.2",
     "expo": "^35.0.1",
-    "expo-cli": "^3.9.1",
+    "expo-cli": "^6.3.12",
     "prop-types": "^15.7.2",
     "react": "16.8.3",
     "react-dom": "16.8.3",
